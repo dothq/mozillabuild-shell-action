@@ -1,8 +1,8 @@
 {
-  "name": "typescript-action",
+  "name": "mozillabuild-shell-action",
   "version": "0.0.0",
   "private": true,
-  "description": "TypeScript template action",
+  "description": "Execute a shell command inside the Mozilla Build shell.",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
@@ -10,8 +10,7 @@
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint src/**/*.ts",
     "package": "ncc build --source-map --license licenses.txt",
-    "test": "jest",
-    "all": "npm run build && npm run format && npm run lint && npm run package && npm test"
+    "all": "npm run build && npm run format && npm run lint && npm run package"
   },
   "repository": {
     "type": "git",
@@ -25,7 +24,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.2.6"
+    "@actions/core": "^1.2.6",
+    "execa": "^5.0.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.15",

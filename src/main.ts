@@ -1,16 +1,35 @@
 import * as core from '@actions/core'
-import {wait} from './wait'
+import execa from 'execa'
+import {existsSync, writeFileSync} from 'fs'
+import {tmpdir} from 'os'
+import {resolve} from 'path'
 
 async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+    if (process.platform !== 'win32')
+      core.setFailed('This can only be ran on Windows.')
 
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+    const command: string = core.getInput('run')
 
-    core.setOutput('time', new Date().toTimeString())
+    core.info(`Executing "${command}"...`)
+
+    const mozillaBuildDir = resolve('C:\\mozilla-build')
+
+    if (existsSync(mozillaBuildDir)) {
+      const shell = resolve(mozillaBuildDir, 'start-shell.bat')
+
+      const tmp = resolve(tmpdir())
+      const scriptPath = resolve(
+        tmp,
+        Math.floor(Math.random() * 16777215).toString(16)
+      )
+
+      writeFileSync(scriptPath, command)
+
+      execa(shell, [`"${scriptPath}"`]).stdout?.pipe(process.stdout)
+    } else {
+      core.setFailed(`${mozillaBuildDir} does not exist.`)
+    }
   } catch (error) {
     core.setFailed(error.message)
   }

@@ -1,11 +1,14 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Run in MozillaBuild'
+description: 'Execute a shell command inside the Mozilla Build shell.'
+author: 'dothq'
+branding:
+  icon: "terminal"
+  color: gray-dark
 inputs:
-  milliseconds: # change this
+  run:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'Command or script you want to execute'
+    default: 'echo "Change the run input to any command or script."'
 runs:
   using: 'node12'
   main: 'dist/index.js'
