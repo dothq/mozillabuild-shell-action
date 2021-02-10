@@ -2,6 +2,66 @@ require('./sourcemap-register.js');module.exports =
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 477:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.dispatch = void 0;
+const execa_1 = __importDefault(__webpack_require__(447));
+const core = __importStar(__webpack_require__(186));
+const dispatch = (cmd, args, cwd) => {
+    return new Promise((resolve, reject) => {
+        core.info(`Starting child "${cmd} ${args === null || args === void 0 ? void 0 : args.join(' ')}".`);
+        const proc = execa_1.default(cmd, args, { cwd: cwd ? cwd : process.cwd() });
+        proc.stdout.on('data', (data) => {
+            const d = data.toString();
+            d.split('\n').forEach((line) => {
+                if (line.length !== 0)
+                    core.info(line);
+            });
+        });
+        proc.stdout.on('error', (data) => {
+            const d = data.toString();
+            d.split('\n').forEach((line) => {
+                if (line.length !== 0)
+                    core.info(line);
+            });
+        });
+        proc.on('exit', () => {
+            core.info(`Done with "${cmd} ${args === null || args === void 0 ? void 0 : args.join(' ')}".`);
+            resolve(true);
+        });
+    });
+};
+exports.dispatch = dispatch;
+
+
+/***/ }),
+
 /***/ 109:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
@@ -35,17 +95,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__webpack_require__(186));
-const execa_1 = __importDefault(__webpack_require__(447));
 const fs_1 = __webpack_require__(747);
 const os_1 = __webpack_require__(87);
 const path_1 = __webpack_require__(622);
+const dispatch_1 = __webpack_require__(477);
 function run() {
-    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         try {
             if (process.platform !== 'win32')
@@ -60,7 +116,7 @@ function run() {
                 fs_1.writeFileSync(scriptPath, command);
                 core.info(scriptPath);
                 core.info(command);
-                (_a = execa_1.default(shell, [`"${scriptPath}"`]).stdout) === null || _a === void 0 ? void 0 : _a.pipe(process.stdout);
+                yield dispatch_1.dispatch(shell, [scriptPath]);
             }
             else {
                 core.setFailed(`${mozillaBuildDir} does not exist.`);
