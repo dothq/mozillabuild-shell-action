@@ -3,6 +3,7 @@ import execa from 'execa'
 import {existsSync, writeFileSync} from 'fs'
 import {tmpdir} from 'os'
 import {resolve} from 'path'
+import { dispatch } from './dispatch'
 
 async function run(): Promise<void> {
   try {
@@ -29,7 +30,7 @@ async function run(): Promise<void> {
       core.info(scriptPath)
       core.info(command)
 
-      execa(shell, [`"${scriptPath}"`]).stdout?.pipe(process.stdout)
+      await dispatch(shell, [scriptPath]);
     } else {
       core.setFailed(`${mozillaBuildDir} does not exist.`)
     }
