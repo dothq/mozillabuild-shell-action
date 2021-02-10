@@ -21,7 +21,7 @@ async function run(): Promise<void> {
       const tmp = resolve(tmpdir())
       const scriptPath = resolve(
         tmp,
-        Math.floor(Math.random() * 16777215).toString(16)
+        `${Math.floor(Math.random() * 16777215).toString(16)}.sh`
       )
 
       writeFileSync(scriptPath, command)
@@ -29,7 +29,7 @@ async function run(): Promise<void> {
       core.info(scriptPath)
       core.info(command)
 
-      await dispatch(shell, [scriptPath])
+      await dispatch(shell, [`"${scriptPath}"`])
     } else {
       core.setFailed(`${mozillaBuildDir} does not exist.`)
     }

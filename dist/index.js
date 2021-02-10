@@ -112,11 +112,11 @@ function run() {
             if (fs_1.existsSync(mozillaBuildDir)) {
                 const shell = path_1.resolve(mozillaBuildDir, 'start-shell.bat');
                 const tmp = path_1.resolve(os_1.tmpdir());
-                const scriptPath = path_1.resolve(tmp, Math.floor(Math.random() * 16777215).toString(16));
+                const scriptPath = path_1.resolve(tmp, `${Math.floor(Math.random() * 16777215).toString(16)}.sh`);
                 fs_1.writeFileSync(scriptPath, command);
                 core.info(scriptPath);
                 core.info(command);
-                yield dispatch_1.dispatch(shell, [scriptPath]);
+                yield dispatch_1.dispatch(shell, [`"${scriptPath}"`]);
             }
             else {
                 core.setFailed(`${mozillaBuildDir} does not exist.`);
