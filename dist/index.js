@@ -48,16 +48,18 @@ function run() {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            if (process.platform !== "win32")
-                core.setFailed("This can only be ran on Windows.");
+            if (process.platform !== 'win32')
+                core.setFailed('This can only be ran on Windows.');
             const command = core.getInput('run');
             core.info(`Executing "${command}"...`);
-            const mozillaBuildDir = path_1.resolve("C:\\mozilla-build");
+            const mozillaBuildDir = path_1.resolve('C:\\mozilla-build');
             if (fs_1.existsSync(mozillaBuildDir)) {
-                const shell = path_1.resolve(mozillaBuildDir, "start-shell.bat");
+                const shell = path_1.resolve(mozillaBuildDir, 'start-shell.bat');
                 const tmp = path_1.resolve(os_1.tmpdir());
                 const scriptPath = path_1.resolve(tmp, Math.floor(Math.random() * 16777215).toString(16));
                 fs_1.writeFileSync(scriptPath, command);
+                core.info(scriptPath);
+                core.info(command);
                 (_a = execa_1.default(shell, [`"${scriptPath}"`]).stdout) === null || _a === void 0 ? void 0 : _a.pipe(process.stdout);
             }
             else {

@@ -26,6 +26,9 @@ async function run(): Promise<void> {
 
       writeFileSync(scriptPath, command)
 
+      core.info(scriptPath)
+      core.info(command)
+
       execa(shell, [`"${scriptPath}"`]).stdout?.pipe(process.stdout)
     } else {
       core.setFailed(`${mozillaBuildDir} does not exist.`)
