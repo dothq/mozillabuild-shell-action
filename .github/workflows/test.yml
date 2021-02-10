@@ -1,4 +1,4 @@
-name: 'test'
+name: test
 
 on:
   pull_request:
@@ -7,18 +7,17 @@ on:
       - main
 
 jobs:
-  build:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v2
-      - run: |
-          npm install
-      - run: |
-          npm run all
   test:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
+
+      - name: Clone mozillabuild
+        run: |
+          curl https://cdn.dothq.co/artifacts/tools/mozilla-build.zip -o mozilla-build.zip
+          ls
+          7z x mozilla-build.zip -aoa -oC:\mozilla-build 
+
       - uses: ./
         with:
           run: uname -a
